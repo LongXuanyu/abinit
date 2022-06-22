@@ -888,7 +888,7 @@ subroutine dyson(green,paw_dmft,self,weiss,opt_weissself)
  end if
 
 !call xmpi_barrier(spaceComm)
- if(paw_dmft%dmft_solv==2) weissinv=0
+!if(paw_dmft%dmft_solv==2) weissinv=0
  call init_green(greeninv,paw_dmft,opt_oper_ksloc=2,wtype=green%w_type)
  call copy_green(green,greeninv,opt_tw=2)
 

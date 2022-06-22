@@ -60,8 +60,11 @@ int init_python_interpreter(const char* python_so) {
   return 1;
  }
  dlerror();                     // clear any existing error
- LOAD(Py_Initialize, void, );   // loads the functions that we will need
- (*Py_Initialize)();            // initialize the interpreter
+ LOAD(Py_IsInitialized, int, );
+ if (!(*Py_IsInitialized)()) {
+  LOAD(Py_Initialize, void, );   // loads the functions that we will need
+  (*Py_Initialize)();            // initialize the interpreter
+ }
  return 0;
 }
 
@@ -138,9 +141,11 @@ void invoke_python_triqs(int rank, char* filapp_in) {
 	if (rank == 0) fprintf(stdout, "invoke_python_triqs: beginning\n");
 
 	// Path to the python interpreter path and impurity solver script
-	string triqs_filename = string(filapp_in) += "_PY_INVOCATION_script.py";
-	string triqs_python_path = string(filapp_in) += "_PY_INVOCATION_python_lib";
-	triqs_python_path = "./" + triqs_python_path;
+	//string triqs_filename = string(filapp_in) += "_PY_INVOCATION_script.py";
+	//string triqs_python_path = string(filapp_in) += "_PY_INVOCATION_python_lib";
+	//triqs_python_path = "./" + triqs_python_path;
+        string triqs_python_path = "/path/to/your/python/library/libpython3.x.so";
+        string triqs_filename = "test.py";
 
 	// Check whether python_lib exists
 	if (!ifstream(triqs_python_path.c_str())) {
@@ -153,7 +158,7 @@ void invoke_python_triqs(int rank, char* filapp_in) {
 	if (rank == 0) fprintf(stdout, "invoke_python_triqs: interpreter initialized\n");
 
 	// Execute script
-	fprintf(stdout, "Reading python script: %s\n", triqs_filename.c_str());
+	//fprintf(stdout, "Reading python script: %s\n", triqs_filename.c_str());
 
 	// Check whether the file exists
 	if (!ifstream(triqs_filename.c_str())) {
@@ -171,7 +176,7 @@ void invoke_python_triqs(int rank, char* filapp_in) {
 	// }
 
 	// Close python
-	close_python_interpreter();
+	//close_python_interpreter();
 	// MPI_Barrier(MPI_COMM_WORLD);
 }
 #else

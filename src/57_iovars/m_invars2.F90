@@ -3585,7 +3585,7 @@ subroutine invars2(bravais,dtset,iout,jdtset,lenstr,mband,msym,npsp,string,usepa
      dtset%plowan_bandf=dtset%dmftbandf
      if (dtset%nbandkss /= 0 .and. dtset%usedmft/=0) then
        dtset%plowan_compute=1
-       dtset%usedmft=0
+       !dtset%usedmft=0
      else if (dtset%optdriver==3) then
        dtset%plowan_compute=10
      else if(dtset%optdriver==4) then

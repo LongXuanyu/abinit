@@ -778,7 +778,7 @@ subroutine init_dmft(dmatpawu, dtset, fermie_dft, fnametmp_app, fnamei, nspinor,
 !=======================
 
  iexist2=1
- if(dtset%iscf<0.and.(paw_dmft%dmft_solv==5.or.paw_dmft%dmft_solv==8)) then
+ if(dtset%iscf<0.and.(paw_dmft%dmft_solv==2.or.paw_dmft%dmft_solv==5.or.paw_dmft%dmft_solv==8)) then
      tmpfil = trim(paw_dmft%filapp)//'_spectralfunction_realfrequencygrid'
      inquire(file=trim(tmpfil),exist=lexist)!,recl=nrecl)
    !  write(6,*) "inquire",lexist
@@ -1075,7 +1075,7 @@ subroutine construct_nwlo_dmft(paw_dmft)
        omega_lo_tmp(ifreq+paw_dmft%dmftqmc_l)=prefacexp*(exp(expfac*real(ifreq-1,kind=dp))-one) + wl
 !       -------- Impose that the each frequency of the logarithmic mesh is on a Matsubara frequency
 ! FIXME : This may be done for all solver, not only for QMCs
-       if(paw_dmft%dmft_solv>=4) then
+!       if(paw_dmft%dmft_solv>=4) then
          ! Compute the integer "n" of iwn
          ifreq2 = nint((omega_lo_tmp(ifreq+paw_dmft%dmftqmc_l)/(paw_dmft%temp*pi)-one)*half)
          ! compute freq
@@ -1088,13 +1088,13 @@ subroutine construct_nwlo_dmft(paw_dmft)
            ABI_BUG(message)
          endif
          select_log(paw_dmft%dmftqmc_l+ifreq)=ifreq2+1
-       endif
+!       endif
      enddo
 
 !       -------- Suppress duplicate frequencies
 ! FIXME : So this also should be done for all solver and remove useless
 ! frequencies
-     if(paw_dmft%dmft_solv>=4) then
+!     if(paw_dmft%dmft_solv>=4) then
        ifreq2=1
        do ifreq=2,paw_dmft%dmft_nwlo-1
          if(select_log(ifreq2).ne.select_log(ifreq)) then
@@ -1104,7 +1104,7 @@ subroutine construct_nwlo_dmft(paw_dmft)
          endif
        enddo
        paw_dmft%dmft_nwlo=ifreq2+1
-     endif
+!     endif
 
      omega_lo_tmp(1)=paw_dmft%temp*pi
      omega_lo_tmp(paw_dmft%dmft_nwlo)=paw_dmft%temp*pi*real(2*paw_dmft%dmft_nwli-1,kind=dp)
